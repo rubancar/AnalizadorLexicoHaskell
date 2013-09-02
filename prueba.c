@@ -1,0 +1,15 @@
+void main()
+{
+int a=3;//CCCCCCCCCCCCCCCCCCCCCCc
+int b=3;
+//AAAAAAAAAAAAAAAAAAAAAAAAAA
+char *ruben;/**HHHHHHHHHHHHHHHHH*/
+int i=0;
+//BBBBBBBBBBBBBBBBBBBBBBBBBB
+for(i;i<3;i++){
+/**DDDDDDDDDDDDDDDDD
+bgdfgbdfhk74893[][]
+DDDDDDDDDDD*/
+a=a+1;
+}
+}
