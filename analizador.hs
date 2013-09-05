@@ -7,12 +7,13 @@ al codigo
 -}
 data Token = EOF | 
              Identificador String | 
-	     EspecificadorDeTipo String | 
+	     EspecificadorDeTipo String |
 	     Instruccion String |
              ValorNumerico String | 
 	     Cadena String |
              Operador Char | 
              Separador Char | 
+	     Modificador String | 
              Error String 
              deriving (Show, Eq)
 
@@ -96,9 +97,14 @@ verificarIdentificador "long" = EspecificadorDeTipo "long"
 verificarIdentificador "short" = EspecificadorDeTipo "short"
 verificarIdentificador "signed" = EspecificadorDeTipo "signed"
 verificarIdentificador "struct" = EspecificadorDeTipo "struct"
+verificarIdentificador "extern" = EspecificadorDeTipo "extern"
+verificarIdentificador "register" = EspecificadorDeTipo "register"
+verificarIdentificador "volatile" = EspecificadorDeTipo "volatile"
+verificarIdentificador "union" = EspecificadorDeTipo "union"
 verificarIdentificador "break" = Instruccion "break"
 verificarIdentificador "case" = Instruccion "case"
 verificarIdentificador "continue" = Instruccion "continue"
+verificarIdentificador "default" = Instruccion "default"
 verificarIdentificador "do" = Instruccion "do"
 verificarIdentificador "else" = Instruccion "else"
 verificarIdentificador "for" = Instruccion "for"
@@ -106,6 +112,13 @@ verificarIdentificador "goto" = Instruccion "goto"
 verificarIdentificador "if" = Instruccion "if"
 verificarIdentificador "return" = Instruccion "return"
 verificarIdentificador "switch" = Instruccion "switch"
+verificarIdentificador "while" = Instruccion "while"
+verificarIdentificador "sizeof" = Instruccion "sizeof"
+verificarIdentificador "typedef" = Instruccion "typedef"
+verificarIdentificador "auto" = Modificador "auto"
+verificarIdentificador "static" = Modificador "static"
+verificarIdentificador "unsigned" = Modificador "unsigned"
+verificarIdentificador "const" = Modificador "const"
 verificarIdentificador z = Identificador z
 
 
@@ -118,7 +131,7 @@ finDeCadenaTexto l@(x:xs) = let (first, rest) = finDeCadenaTexto xs in (x:first,
 --lee un numero sea entero o flotante, lo devuelve junto con el resto del
 --String para seguir analizando
 finDeNumero [] = ([],[])
-finDeNumero l@(x:y:xs) | esDigito x && not(esDigito y) && y /= '.' = ([],xs)
+finDeNumero l@(x:y:xs) | esDigito x && not(esDigito y) && y /= '.' = (x:[],xs)
 finDeNumero l@(x:y:xs) | esDigito x && y == '.' || x == '.' && esDigito y = let (first, rest) = finDeNumero (y:xs) in (x:first, rest)
 finDeNumero l@(x:xs) = let (first, rest) = finDeNumero xs in (x:first, rest)
 
@@ -194,7 +207,7 @@ esLetraODigito ch = esLetra ch || esDigito ch
 
 esGuioBajo ch = ch == '_'
 
-esOperador ch = ch `elem` "+-*/="
+esOperador ch = ch `elem` "+-*/=><"
 
 esSeparador ch = ch `elem` ";,(){}[]"
 
@@ -238,3 +251,4 @@ main = do
 	let tokens = lexer contents
 	printAnalisis  tokens
 	hClose handle
+	
